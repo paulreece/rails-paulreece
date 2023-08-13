@@ -368,6 +368,10 @@ module ActiveRecord
         cache.compute_if_absent(key) { StatementCache.create(connection, &block) }
       end
 
+      def table_alias
+        @table_alias = nil
+      end
+
       private
         def inherited(subclass)
           super

@@ -190,20 +190,27 @@ module Arel
     describe "equality" do
       it "is equal with equal ivars" do
         relation1 = Table.new(:users)
-        relation1.table_alias = "zomg"
+        relation1.name = "zomg"
         relation2 = Table.new(:users)
-        relation2.table_alias = "zomg"
+        relation2.name = "zomg"
         array = [relation1, relation2]
         assert_equal 1, array.uniq.size
       end
 
       it "is not equal with different ivars" do
         relation1 = Table.new(:users)
-        relation1.table_alias = "zomg"
+        relation1.name = "zomg"
         relation2 = Table.new(:users)
-        relation2.table_alias = "zomg2"
+        relation2.name = "zomg2"
         array = [relation1, relation2]
         assert_equal 2, array.uniq.size
+      end
+    end
+
+    it "raises NoMethodError on table_alias=" do
+      users = Table.new(:users)
+      assert_raises(NoMethodError) do
+        users.arel_table.table_alias = "u"
       end
     end
   end

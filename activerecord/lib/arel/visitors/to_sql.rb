@@ -50,7 +50,12 @@ module Arel # :nodoc: all
 
         def visit_Arel_Nodes_InsertStatement(o, collector)
           collector << "INSERT INTO "
-          collector = visit o.relation, collector
+
+          if o.relation.table_alias
+            collector << "#{o.relation.name }"
+          else
+            collector = visit o.relation, collector
+          end
 
           unless o.columns.empty?
             collector << " ("
@@ -575,7 +580,7 @@ module Arel # :nodoc: all
           end
 
           if o.table_alias
-            collector << " " << quote_table_name(o.table_alias)
+            collector << " AS " << quote_table_name(o.table_alias)
           end
 
           collector

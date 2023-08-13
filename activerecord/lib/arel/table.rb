@@ -8,7 +8,8 @@ module Arel # :nodoc: all
     @engine = nil
     class << self; attr_accessor :engine; end
 
-    attr_accessor :name, :table_alias
+    attr_accessor :name
+    attr_reader :table_alias
 
     def initialize(name, as: nil, klass: nil, type_caster: klass&.type_caster)
       @name =
@@ -27,7 +28,11 @@ module Arel # :nodoc: all
       if as.to_s == @name
         as = nil
       end
-      @table_alias = as
+      if @klass&.table_alias
+        @table_alias = @klass.table_alias
+      else
+        @table_alias = as
+      end
     end
 
     def alias(name = "#{self.name}_2")
